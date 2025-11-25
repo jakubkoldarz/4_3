@@ -5,6 +5,9 @@ const responseText = document.getElementById("response");
 const allJokesList = document.getElementById("jokes-list");
 const addJokeForm = document.getElementById("add-joke-form");
 const categorySelect = document.getElementById("category-select");
+const showStatsBtn = document.getElementById("show-stats-btn");
+const statsTable = document.getElementById("stats-table");
+const statsBody = document.getElementById("stats-body");
 
 const API_URL = "http://localhost:3000/jokebook";
 
@@ -97,7 +100,6 @@ addJokeForm.addEventListener("submit", async (event) => {
 
         if (res.ok) {
             addJokeForm.reset();
-            // Odśwież listę wszystkich żartów po dodaniu nowego
             const selectedCategory = categoryButtons.querySelector("button.active")?.textContent;
             if (selectedCategory) {
                 fetchAllJokes(selectedCategory);
@@ -109,6 +111,35 @@ addJokeForm.addEventListener("submit", async (event) => {
         console.error("Błąd podczas dodawania żartu:", error);
     }
 });
+
+async function fetchStats() {
+    try {
+        const response = await fetch(`${API_URL}/stats`);
+        const stats = await response.json();
+        displayStats(stats);
+    } catch (error) {
+        console.error("Błąd podczas pobierania statystyk:", error);
+    }
+}
+
+function displayStats(stats) {
+    statsBody.innerHTML = "";
+    for (const category in stats) {
+        const row = document.createElement("tr");
+        const categoryCell = document.createElement("td");
+        const countCell = document.createElement("td");
+
+        categoryCell.textContent = category;
+        countCell.textContent = stats[category];
+
+        row.appendChild(categoryCell);
+        row.appendChild(countCell);
+        statsBody.appendChild(row);
+    }
+    statsTable.classList.remove("hidden");
+}
+
+showStatsBtn.addEventListener("click", fetchStats);
 
 // Inicjalizacja
 fetchCategories();
