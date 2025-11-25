@@ -97,6 +97,31 @@ app.get("/jokebook/stats", (req, res) => {
     res.json(stats);
 });
 
+app.get("/jokebook/search", (req, res) => {
+    const word = req.query.word;
+
+    if (!word) {
+        return res.status(400).json({ error: "search word is required" });
+    }
+
+    const searchResults = [];
+    const lowerCaseWord = word.toLowerCase();
+
+    funnyJoke.forEach((joke) => {
+        if (joke.joke.toLowerCase().includes(lowerCaseWord) || joke.response.toLowerCase().includes(lowerCaseWord)) {
+            searchResults.push({ ...joke, category: "funnyJoke" });
+        }
+    });
+
+    lameJoke.forEach((joke) => {
+        if (joke.joke.toLowerCase().includes(lowerCaseWord) || joke.response.toLowerCase().includes(lowerCaseWord)) {
+            searchResults.push({ ...joke, category: "lameJoke" });
+        }
+    });
+
+    res.json(searchResults);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

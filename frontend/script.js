@@ -8,6 +8,9 @@ const categorySelect = document.getElementById("category-select");
 const showStatsBtn = document.getElementById("show-stats-btn");
 const statsTable = document.getElementById("stats-table");
 const statsBody = document.getElementById("stats-body");
+const searchForm = document.getElementById("search-form");
+const searchInput = document.getElementById("search-input");
+const searchResultsContainer = document.getElementById("search-results");
 
 const API_URL = "http://localhost:3000/jokebook";
 
@@ -140,6 +143,47 @@ function displayStats(stats) {
 }
 
 showStatsBtn.addEventListener("click", fetchStats);
+
+async function searchJokes(word) {
+    try {
+        const response = await fetch(`${API_URL}/search?word=${encodeURIComponent(word)}`);
+        const results = await response.json();
+        displaySearchResults(results);
+    } catch (error) {
+        console.error("Błąd podczas wyszukiwania żartów:", error);
+        searchResultsContainer.innerHTML = "<p>Wystąpił błąd podczas wyszukiwania.</p>";
+    }
+}
+
+function displaySearchResults(results) {
+    searchResultsContainer.innerHTML = "";
+
+    if (results.length === 0) {
+        searchResultsContainer.innerHTML = "<p>Brak żartów pasujących do wyszukiwania.</p>";
+        return;
+    }
+
+    const list = document.createElement("ul");
+    list.style.listStyleType = "none";
+    list.style.paddingLeft = "0";
+
+    results.forEach((joke) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `[${joke.category}] ${joke.joke} — <i>${joke.response}</i>`;
+        listItem.style.marginBottom = "10px";
+        list.appendChild(listItem);
+    });
+
+    searchResultsContainer.appendChild(list);
+}
+
+searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const searchTerm = searchInput.value.trim();
+    if (searchTerm) {
+        searchJokes(searchTerm);
+    }
+});
 
 // Inicjalizacja
 fetchCategories();

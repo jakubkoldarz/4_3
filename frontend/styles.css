@@ -122,3 +122,7 @@ form button {
 .hidden {
     display: none;
 }
+
+#search-results {
+    margin-top: 20px;
+}
