@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Żarty</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Księga Żartów</h1>
+
+            <div id="categories" class="card">
+                <h2>Kategorie</h2>
+                <div id="category-buttons"></div>
+            </div>
+
+            <div id="joke-display" class="card">
+                <h2>Losowy żart</h2>
+                <p id="joke"></p>
+                <p id="response"></p>
+            </div>
+
+            <div id="all-jokes" class="card">
+                <h2>Wszystkie żarty z kategorii</h2>
+                <ul id="jokes-list"></ul>
+            </div>
+
+            <div id="add-joke" class="card">
+                <h2>Dodaj nowy żart</h2>
+                <form id="add-joke-form">
+                    <label for="category-select">Kategoria:</label>
+                    <select id="category-select" name="category"></select>
+                    <label for="joke-input">Żart:</label>
+                    <input type="text" id="joke-input" name="joke" required />
+                    <label for="response-input">Odpowiedź:</label>
+                    <input type="text" id="response-input" name="response" required />
+                    <button type="submit">Dodaj żart</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
